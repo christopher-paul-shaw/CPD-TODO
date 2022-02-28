@@ -50,32 +50,5 @@ app.get("/remove/:id",(req, res) => {
 	res.redirect("/");
 });
 
-
 // Enable Server
-app.listen(3001, () => console.log("Server Up and running"));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// close the database connection
-/** db.close((err) => {
-	if (err) {
-	  return console.error(err.message);
-	}
-	console.log('Close the database connection.');
-  });
-  **/
+app.listen(3000, () => console.log("Server Up and running"));
