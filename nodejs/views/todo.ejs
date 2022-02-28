@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+	<head>
+	<title>Todo App</title>
+	<link rel="stylesheet" href="/static/stylesheets/style.css" type="text/css">
+</head>
+<body>
+	<div class="container">
+	
+		<div class="todo">
+			<h1>To-Do List</h1>
+		<form action="/" method="POST" class="todo-header">
+			<input type="text" name="content">
+			<button type="submit">Add</button>
+		</form>
+		<ul class="todo-list">
+			<% tasks.forEach(details => { %>
+			<li class="todo-list-item">
+			<div class="todo-list-item-name"><%= details.name %></div>
+			<% if ( page == 'index' ) { %>
+			<a href="/complete/<%= details.id %>" class="button">
+			Done
+			</a>
+			<a href="/remove/<%= details.id %>" class="button">
+			Delete
+			</a>
+			<% } %>
+			</li>
+			<% }) %>
+			</ul>
+
+			<% if ( page == 'index' ) { %>
+			<a href="/completed" class="completed">View Completed</a>
+			<% } else { %>
+			<a href="/" class="completed">View Current</a>
+			<% } %>
+		</div>
+
+
+
+		
+	</div>
+</body>

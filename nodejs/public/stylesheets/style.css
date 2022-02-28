@@ -1,0 +1,68 @@
+body {
+    background: #efefef;
+}
+
+.todo {
+    background: #fff;
+    margin: auto;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+
+.todo h1 {
+    text-align: center;
+    background: #ccc;
+    margin: 0;
+    padding: 8px;
+}
+
+form {
+    text-align: center;
+    padding: 10px;
+}
+form input {
+    width: 80%;
+    padding: 8px;
+}
+form button {
+    width: 10%;
+    padding: 8px;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+ul li {
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+ul li * {
+    display: inline-block;
+}
+
+ul li div {
+    width: 75%;
+}
+.button {
+    background: #efefef;
+    padding: 4px;
+    border: 1px solid #efefef;
+    display: inline-block;
+    color: #aaa;
+}
+
+.completed {
+    text-decoration: none !important;
+    padding: 10px;
+    background: #ccc;
+    display: block;
+    text-align: center;
+    color: #efefef;
+   
+}
