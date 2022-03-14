@@ -54,9 +54,6 @@ app.get('/completed',(req, res) => {
 });
   
 app.post('/',(req, res) => {
-	
-
-	
 	// Validate
 	if (!req.body.item) {
 		res.setHeader('Content-Type', 'application/json');
@@ -76,12 +73,10 @@ app.post("/complete",(req, res) => {
 });
 
 app.post("/remove",(req, res) => {
-	console.log(req.body.id);
 	db.run("DELETE FROM items WHERE id = ?", req.body.id);
 	res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ "status": 1, "message": "Item Removed"}));
 });
-
 
 // Enable Server
 app.listen(3000, () => console.log("Server Up and running"));
