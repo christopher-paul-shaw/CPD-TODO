@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <title>Client</title>
+    </head>
+    <body>
+
+
+        <input type="checkbox" class="js-show-completed" />
+<div class="js-form">
+    <input type="text" name="item" placeholder="Item Name" class="js-form-item"/>
+    <button type="button" class="js-form-submit">Add</button>
+</div>
+
+<div class="js-list"></div>
+
+<style>
+
+    body {
+        background: #efefef;
+    }
+
+    .js-form , .js-list {
+
+        width: 90%;
+        max-width: 500px;
+        margin: 10px auto;
+        background: #fff;
+        padding: 10px;
+
+    }
+
+    .js-name {
+        display: block;
+    }
+
+    .js-list div {
+        padding: 10px 0px;
+    }
+
+    .js-list div:not(:first-child) {
+        border-top: 1px dotted #ccc;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .js-delete, .js-complete {
+        display: inline-block;
+        padding: 4px;
+        border: 1px solid #ccc;
+        background: #efefef;
+    }
+
+</style>
+
+
+<div class="js-item-template hide">
+    <input type="hidden" name="id" class="js-id" />
+    <span class="js-name"></span>
+    <span class="js-delete js-action">DELETE</span>
+    <span class="js-complete js-action">COMPLETE</span>
+</div>
+
+<script>
+
+    let api_url = 'http://localhost:3000';
+
+    function loadList () {
+        let targetZone = document.querySelector('.js-list');
+        let template = document.querySelector('.js-item-template');
+        let completed = document.querySelector('.js-show-completed');
+
+        targetZone.innerHTML = '';
+        var xhr = new XMLHttpRequest();
+        url = api_url;
+        if (completed.checked) {
+            url = api_url +'/completed';
+        }
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+        xhr.onreadystatechange = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+                let obj = JSON.parse(this.response);
+                for (var id in obj) {
+                    let item = template.cloneNode(true);
+                    item.classList.remove('hide');
+                    item.querySelector('.js-name').innerHTML = obj[id].name;
+                    item.querySelector('.js-id').value = obj[id].id;
+                    if (obj[id].completed == 1) {
+                        item.querySelector('.js-complete').setAttribute('style','display:none');
+                        item.querySelector('.js-delete').setAttribute('style','display:none');
+                    }
+                    
+                    targetZone.appendChild(item);
+                    addEventsToItem(item);
+                }
+            }
+        }
+        xhr.send();
+
+    }
+    
+
+    document.querySelector('.js-show-completed').addEventListener('click',function(e) {
+        loadList();
+    });
+  
+    document.querySelector('.js-form-submit').addEventListener('click',function(e) {
+        let item = this.parentElement.querySelector('.js-form-item');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", api_url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+        xhr.onreadystatechange = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                let obj = JSON.parse(this.response);
+                alert(obj.message);
+                loadList();
+                item.value = '';
+            }
+        }
+        xhr.send("item="+item.value);
+    });
+
+    function addEventsToItem (itemDiv) {
+        itemDiv.querySelector('.js-delete').addEventListener('click',function(e) {
+            let id = this.parentElement.querySelector('.js-id').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", api_url+'/remove', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");   
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    let obj = JSON.parse(this.response);
+                    alert(obj.message);
+                    loadList();
+                }
+            }
+            xhr.send("id="+id);
+        });
+        itemDiv.querySelector('.js-complete').addEventListener('click',function(e) {   
+            let id = this.parentElement.querySelector('.js-id').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", api_url+'/complete', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");   
+            xhr.onreadystatechange = function() { 
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    let obj = JSON.parse(this.response);
+                    alert(obj.message);
+                    loadList();
+                }
+            }
+            xhr.send("id="+id);
+        });
+
+    }
+
+
+    loadList();
+    
+    </script>
+    </body>
+    </html>
+    
+    
